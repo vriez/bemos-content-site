@@ -31,9 +31,23 @@ Body in markdown…
 ```
 
 Editorial workflow lives in `status`: **draft → review → published**. Only
-`published` posts render to the live site — work-in-progress stays private.
+`published` posts render to the live site — and only once their `publishDate`
+has passed, which is how **scheduling** works. Work-in-progress stays private.
 
-## Publishing a post
+## Authoring, scheduling & auto-publish
+
+The full operator guide is **[docs/CMS.md](docs/CMS.md)**. In short:
+
+- **Author without code:** the **Content Studio** at `/admin/` (Decap CMS) lets
+  an editor create/edit posts in a browser; it commits markdown for you.
+  (One-time OAuth setup — see docs.)
+- **Schedule:** set `status: published` with a **future** `publishDate`. The
+  post stays hidden until then.
+- **Auto-publish:** the timed **Scheduled Publish** workflow rebuilds production
+  every ~15 min, so a scheduled post goes live on its own — no push, no deploy.
+- **See what's live vs. queued:** `npm run status`.
+
+## Publishing a post (by hand)
 
 1. Add/edit a `.md` file in `content/` (set `status: published`).
 2. Commit to `staging` to preview, then merge to `main` to go live.

@@ -1,0 +1,63 @@
+name: Scheduled Publish
+
+# Scheduling for a STATIC site: a post is committed ahead of time with a future
+# `publishDate` and `status: published`, but the build only renders it once that
+# date has passed (see `isLive` in lib/posts.ts). This workflow rebuilds and
+# redeploys PRODUCTION on a timer, so a scheduled post flips live on the next
+# tick after its moment — no human, no push, no code deploy.
+#
+# Notes:
+# - GitHub cron only runs on the default branch (main) — which is exactly what
+#   we deploy to production, so that's correct.
+# - GitHub may delay scheduled runs by several minutes under load; the cadence
+#   below is the *floor*, not a guarantee. Fine for editorial scheduling.
+# - `workflow_dispatch` lets an editor force an immediate publish sweep.
+on:
+  schedule:
+    - cron: '*/15 * * * *' # every 15 minutes
+  workflow_dispatch: {}
+
+permissions:
+  contents: write # peaceiris pushes built output to the gh-pages branch
+
+# Share the same concurrency group as deploy.yml so a timed rebuild never races
+# a push-triggered deploy on the gh-pages ref. Queue, don't cancel.
+concurrency:
+  group: gh-pages-deploy
+  cancel-in-progress: false
+
+jobs:
+  rebuild-production:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Report what's scheduled vs. going live on this run — visible in the
+      # Actions log so editors can confirm a scheduled post landed.
+      - name: Publishing status
+        run: node scripts/publish-status.mjs
+
+      - name: Build (production)
+        env:
+          NEXT_PUBLIC_BASE_PATH: /bemos-content-site
+        run: npm run build
+
+      - name: Deploy to GitHub Pages (production)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out
+          destination_dir: .
+          keep_files: true # preserve the staging environment's files
+          user_name: github-actions[bot]
+          user_email: github-actions[bot]@users.noreply.github.com
+          commit_message: 'scheduled publish sweep: ${{ github.sha }}'

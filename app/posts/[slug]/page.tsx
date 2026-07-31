@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getPublishedPosts, getPostBySlug } from '@/lib/posts';
+import { getLivePosts, getPostBySlug, isLive } from '@/lib/posts';
 import { renderMarkdown } from '@/lib/markdown';
 
-/** Pre-render one static page per published post at build time. */
+/** Pre-render one static page per LIVE post at build time (published + past its schedule). */
 export function generateStaticParams() {
-  return getPublishedPosts().map((p) => ({ slug: p.slug }));
+  return getLivePosts().map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -28,8 +28,9 @@ export default async function PostPage({
 }) {
   const { slug } = await params;
   const post = getPostBySlug(slug);
-  // Guard: never serve a non-published post, even by direct slug.
-  if (!post || post.status !== 'published') notFound();
+  // Guard: never serve a post that isn't live — not published, or still
+  // waiting for its scheduled publish date — even by direct slug.
+  if (!post || !isLive(post)) notFound();
 
   return (
     <article className="post">
@@ -53,7 +54,9 @@ export default async function PostPage({
 
 function formatDate(iso: string): string {
   if (!iso) return '';
-  const d = new Date(iso + 'T00:00:00Z');
+  // Accept a bare date ("2026-07-31") or a full ISO datetime (scheduled posts).
+  const d = new Date(iso.includes('T') ? iso : iso + 'T00:00:00Z');
+  if (Number.isNaN(d.getTime())) return '';
   return d.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',

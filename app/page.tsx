@@ -37,7 +37,9 @@ export default function HomePage() {
 
 function formatDate(iso: string): string {
   if (!iso) return '';
-  const d = new Date(iso + 'T00:00:00Z');
+  // Accept a bare date ("2026-07-31") or a full ISO datetime (scheduled posts).
+  const d = new Date(iso.includes('T') ? iso : iso + 'T00:00:00Z');
+  if (Number.isNaN(d.getTime())) return '';
   return d.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
