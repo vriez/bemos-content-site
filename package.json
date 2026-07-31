@@ -5,10 +5,12 @@
   "description": "BemOS Plantoes content platform — the publish-to-live foundation.",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && node scripts/generate-feeds.mjs",
     "start": "next start",
     "lint": "next lint",
-    "status": "node scripts/publish-status.mjs"
+    "status": "node scripts/publish-status.mjs",
+    "feeds": "node scripts/generate-feeds.mjs",
+    "syndicate": "node scripts/syndicate.mjs"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",

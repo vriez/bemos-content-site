@@ -61,3 +61,30 @@ jobs:
           user_name: github-actions[bot]
           user_email: github-actions[bot]@users.noreply.github.com
           commit_message: 'scheduled publish sweep: ${{ github.sha }}'
+
+      # After deploy, push each newly-live post to the approved external channel.
+      # No SYNDICATION_WEBHOOK_URL secret → the script DRY-RUNS (logs the payload,
+      # writes nothing), so this step is safe before the CEO wires a connector.
+      # With the secret set it POSTs once per post and records it in the ledger.
+      - name: Syndicate new posts
+        env:
+          NEXT_PUBLIC_BASE_PATH: /bemos-content-site
+          SYNDICATION_WEBHOOK_URL: ${{ secrets.SYNDICATION_WEBHOOK_URL }}
+          SYNDICATION_WEBHOOK_SECRET: ${{ secrets.SYNDICATION_WEBHOOK_SECRET }}
+          SYNDICATION_CHANNEL: ${{ vars.SYNDICATION_CHANNEL }}
+        run: npm run syndicate
+
+      # Commit the syndication ledger back to main so a post is never re-posted
+      # on the next sweep. No-op when nothing changed (dry-run, or nothing new).
+      - name: Persist syndication ledger
+        run: |
+          if git diff --quiet -- content/.syndicated.json; then
+            echo "Ledger unchanged — nothing to commit."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add content/.syndicated.json
+          git commit -m "chore: update syndication ledger [skip ci]"
+          git pull --rebase origin main
+          git push origin HEAD:main

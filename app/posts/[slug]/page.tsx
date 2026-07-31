@@ -1,24 +1,28 @@
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getLivePosts, getPostBySlug, isLive } from '@/lib/posts';
 import { renderMarkdown } from '@/lib/markdown';
+import { articleJsonLd, buildPostMetadata } from '@/lib/seo';
 
 /** Pre-render one static page per LIVE post at build time (published + past its schedule). */
 export function generateStaticParams() {
   return getLivePosts().map((p) => ({ slug: p.slug }));
 }
 
+/**
+ * SEO metadata is auto-generated from the post at build (= publish) time:
+ * canonical URL, OpenGraph article tags, and a Twitter card. See `lib/seo.ts`.
+ */
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
-}) {
+}): Promise<Metadata> {
   const { slug } = await params;
   const post = getPostBySlug(slug);
-  return {
-    title: post ? `${post.title} · BemOS Plantoes` : 'Not found',
-    description: post?.excerpt,
-  };
+  if (!post) return { title: 'Not found' };
+  return buildPostMetadata(post);
 }
 
 export default async function PostPage({
@@ -34,6 +38,11 @@ export default async function PostPage({
 
   return (
     <article className="post">
+      {/* Structured data for search rich-results — generated from the post. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd(post)) }}
+      />
       <Link href="/" className="back-link">
         ← All posts
       </Link>

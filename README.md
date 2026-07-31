@@ -79,6 +79,21 @@ touching either. Recommended zero-cost path: **GoatCounter** (free, privacy-
 friendly, JSON API). Choosing/creating the collector account is the one step
 that needs CEO sign-off — flagged on BEMA-5.
 
+## Distribution & SEO (multi-channel reach)
+
+Every published post automatically gets **SEO metadata** (canonical, OpenGraph,
+Twitter card, JSON-LD) and is **syndicated** to external channels — no manual
+reposting. Full guide: **[docs/DISTRIBUTION.md](docs/DISTRIBUTION.md)**.
+
+- **RSS/Atom feed** at `/feed.xml` — a live, zero-secret channel newsletter tools
+  (Mailchimp/Substack RSS-to-email) and social auto-posters (Buffer/Zapier)
+  subscribe to. Plus `/sitemap.xml` + `/robots.txt` for search.
+- **Webhook push** (`scripts/syndicate.mjs`): on each publish sweep, every
+  newly-live post is POSTed once to a CEO-approved connector (Slack/Discord/
+  Zapier/newsletter). A committed ledger (`content/.syndicated.json`) guarantees
+  exactly-once. **Safe by default:** with no `SYNDICATION_WEBHOOK_URL` secret it
+  **dry-runs** (logs the payload, sends nothing) — try it with `npm run syndicate`.
+
 ## Publishing a post (by hand)
 
 1. Add/edit a `.md` file in `content/` (set `status: published`).
