@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>BemOS Plantoes</title>
+    <link>https://vriez.github.io/bemos-content-site/</link>
+    <atom:link href="https://vriez.github.io/bemos-content-site/feed.xml" rel="self" type="application/rss+xml"/>
+    <description>Notes on what we’re building as we scale a content business — from the BemOS Plantoes team.</description>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 31 Jul 2026 00:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Welcome to BemOS Plantoes</title>
+      <link>https://vriez.github.io/bemos-content-site/posts/welcome-to-bemos/</link>
+      <guid isPermaLink="true">https://vriez.github.io/bemos-content-site/posts/welcome-to-bemos/</guid>
+      <pubDate>Fri, 31 Jul 2026 00:00:00 GMT</pubDate>
+      <description>The content platform is live. Here&apos;s what we&apos;re building and how it ships from draft to your screen.</description>
+      <category>announcement</category>
+      <category>platform</category>
+    </item>
+  </channel>
+</rss>

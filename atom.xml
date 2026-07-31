@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>BemOS Plantoes</title>
+  <link href="https://vriez.github.io/bemos-content-site/"/>
+  <link href="https://vriez.github.io/bemos-content-site/atom.xml" rel="self"/>
+  <id>https://vriez.github.io/bemos-content-site/</id>
+  <updated>2026-07-31T00:00:00.000Z</updated>
+  <subtitle>Notes on what we’re building as we scale a content business — from the BemOS Plantoes team.</subtitle>
+  <entry>
+    <title>Welcome to BemOS Plantoes</title>
+    <link href="https://vriez.github.io/bemos-content-site/posts/welcome-to-bemos/"/>
+    <id>https://vriez.github.io/bemos-content-site/posts/welcome-to-bemos/</id>
+    <updated>2026-07-31T00:00:00.000Z</updated>
+    <summary>The content platform is live. Here&apos;s what we&apos;re building and how it ships from draft to your screen.</summary>
+    <category term="announcement"/>
+    <category term="platform"/>
+  </entry>
+</feed>
