@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import AnalyticsTracker from './analytics-tracker';
 import './globals.css';
 
 const base = process.env.NEXT_PUBLIC_BASE_PATH || '';
@@ -24,12 +25,14 @@ export default function RootLayout({
             </Link>
             <nav className="nav">
               <Link href="/">Home</Link>
+              <Link href="/dashboard/">Dashboard</Link>
             </nav>
           </div>
         </header>
         <main>
           <div className="container">{children}</div>
         </main>
+        <AnalyticsTracker />
         <footer className="site-footer">
           <div className="container">
             Published by the BemOS content platform · auto-deployed from{' '}

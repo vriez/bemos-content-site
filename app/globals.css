@@ -105,3 +105,231 @@ article.post .post-meta { margin-bottom: 24px; }
   border-radius: 6px;
   padding: 2px 8px;
 }
+
+/* ---------- Analytics dashboard ---------- */
+
+/* The dashboard needs more room than the 720px reading column. */
+.container:has(.dash) {
+  max-width: 1040px;
+}
+
+.dash-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.dash-head h1 {
+  font-size: 1.8rem;
+  margin: 0 0 4px;
+}
+.dash-sub {
+  color: var(--muted);
+  margin: 0;
+  font-size: 0.95rem;
+}
+.badge-sample {
+  flex: none;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #f2c94c;
+  border: 1px solid rgba(242, 201, 76, 0.35);
+  background: rgba(242, 201, 76, 0.08);
+  border-radius: 999px;
+  padding: 4px 12px;
+  white-space: nowrap;
+}
+
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin: 24px 0 8px;
+}
+.kpi {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.kpi-val {
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--text);
+}
+.kpi-label {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.dash-card {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-top: 18px;
+}
+.card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.card-head h2 {
+  font-size: 1.05rem;
+  margin: 0;
+}
+.card-note {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+/* Trend bars */
+.trend {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 140px;
+}
+.trend-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+  gap: 6px;
+}
+.trend-bar {
+  width: 100%;
+  min-height: 2px;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(180deg, var(--accent) 0%, #2f8f70 100%);
+}
+.trend-x {
+  color: var(--muted);
+  font-size: 0.66rem;
+}
+
+/* Performance table */
+.table-wrap {
+  overflow-x: auto;
+}
+.perf-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+.perf-table th,
+.perf-table td {
+  padding: 10px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.perf-table th {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.perf-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.perf-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.perf-table .strong {
+  font-weight: 700;
+  color: var(--text);
+}
+.perf-table .rank {
+  color: var(--muted);
+}
+.perf-table .c-title {
+  white-space: normal;
+  min-width: 220px;
+}
+.status {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-radius: 999px;
+  padding: 2px 9px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.status-published {
+  color: var(--accent);
+  border-color: rgba(79, 209, 165, 0.4);
+}
+.status-review {
+  color: var(--accent-2);
+  border-color: rgba(110, 168, 254, 0.4);
+}
+.status-draft {
+  color: var(--muted);
+}
+
+/* Source bars */
+.src-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.src-row {
+  display: grid;
+  grid-template-columns: 90px 1fr 120px;
+  align-items: center;
+  gap: 12px;
+}
+.src-name {
+  color: var(--text);
+  font-size: 0.88rem;
+}
+.src-track {
+  height: 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.src-fill {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-2), var(--accent));
+  border-radius: 999px;
+}
+.src-val {
+  text-align: right;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+.src-pct {
+  color: var(--muted);
+}
+
+.dash-foot {
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin-top: 20px;
+}
+
+@media (max-width: 720px) {
+  .kpi-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .src-row {
+    grid-template-columns: 76px 1fr 92px;
+  }
+}
