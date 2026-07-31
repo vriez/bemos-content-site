@@ -1,0 +1,64 @@
+name: Build & Deploy
+
+# CI/CD: every push to `main` deploys to PRODUCTION; every push to `staging`
+# deploys to the STAGING environment. Both publish to the single GitHub Pages
+# site (production at the root, staging under /staging/), which is the
+# repo-driven auto-deploy path.
+on:
+  push:
+    branches: [main, staging]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write # peaceiris pushes built output to the gh-pages branch
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      # Base path differs per environment so the SAME code serves correctly
+      # from the root (production) or the /staging/ subpath.
+      - name: Set environment
+        id: env
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/staging" ]; then
+            echo "base=/bemos-content-site/staging" >> "$GITHUB_OUTPUT"
+            echo "dest=staging" >> "$GITHUB_OUTPUT"
+            echo "name=staging" >> "$GITHUB_OUTPUT"
+          else
+            echo "base=/bemos-content-site" >> "$GITHUB_OUTPUT"
+            echo "dest=." >> "$GITHUB_OUTPUT"
+            echo "name=production" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build (${{ steps.env.outputs.name }})
+        env:
+          NEXT_PUBLIC_BASE_PATH: ${{ steps.env.outputs.base }}
+        run: npm run build
+
+      # PRs only build (gate the merge); pushes to main/staging deploy.
+      - name: Deploy to GitHub Pages (${{ steps.env.outputs.name }})
+        if: github.event_name == 'push'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out
+          destination_dir: ${{ steps.env.outputs.dest }}
+          keep_files: true # preserve the other environment's files
+          user_name: github-actions[bot]
+          user_email: github-actions[bot]@users.noreply.github.com
+          commit_message: "deploy ${{ steps.env.outputs.name }}: ${{ github.sha }}"
