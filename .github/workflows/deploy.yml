@@ -13,9 +13,11 @@ on:
 permissions:
   contents: write # peaceiris pushes built output to the gh-pages branch
 
+# Single shared group so main and staging never push to gh-pages at the same
+# time (concurrent pushes race on creating/locking the ref). Queue, don't cancel.
 concurrency:
-  group: pages-${{ github.ref }}
-  cancel-in-progress: true
+  group: gh-pages-deploy
+  cancel-in-progress: false
 
 jobs:
   build-deploy:
@@ -25,7 +27,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - run: npm ci
