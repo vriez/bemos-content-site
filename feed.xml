@@ -6,7 +6,16 @@
     <atom:link href="https://vriez.github.io/bemos-content-site/feed.xml" rel="self" type="application/rss+xml"/>
     <description>Notes on what we’re building as we scale a content business — from the BemOS Plantoes team.</description>
     <language>en-us</language>
-    <lastBuildDate>Fri, 31 Jul 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 01 Aug 2026 09:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Scheduling test: this post published itself</title>
+      <link>https://vriez.github.io/bemos-content-site/posts/scheduled-publishing-is-live/</link>
+      <guid isPermaLink="true">https://vriez.github.io/bemos-content-site/posts/scheduled-publishing-is-live/</guid>
+      <pubDate>Sat, 01 Aug 2026 09:00:00 GMT</pubDate>
+      <description>A scheduled test post. It was committed ahead of time and went live on its own — no push, no deploy.</description>
+      <category>announcement</category>
+      <category>platform</category>
+    </item>
     <item>
       <title>Welcome to BemOS Plantoes</title>
       <link>https://vriez.github.io/bemos-content-site/posts/welcome-to-bemos/</link>
